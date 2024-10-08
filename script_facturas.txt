@@ -1,0 +1,116 @@
+create table tabla_clientes (
+id_cliente  int  (6)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+nombre varchar (16),
+apellido_paterno varchar (16),
+apellido_materno varchar (16),
+num_telefono varchar (10),
+rfc varchar (13),
+calle varchar (32),
+colonia varchar (32),
+cp varchar (5),
+ciudad varchar (32),
+correo_electronico varchar (64)
+);
+
+create table tabla_tiendas (
+id_tienda int  (6)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+nombre varchar (64),
+rfc varchar (13),
+calle varchar (32),
+colonia varchar (32),
+cp varchar (5),
+ciudad varchar (32),
+num_telefono varchar (10),
+correo_electronico varchar (64)
+);
+
+create table tabla_umedidas(
+id_umedida int  (3)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+umedida varchar (16)
+);
+
+
+create table tabla_productos(
+id_producto int  (10)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+descripcion varchar(64),
+preciou numeric (13,2),
+preciov numeric (13,2),
+id_umedida int (3),
+FOREIGN KEY (id_umedida) REFERENCES tabla_umedidas (id_umedida)
+);
+
+create table tabla_inventarios (
+id_inventario int  (10)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+inventario numeric (5),
+id_producto int (10),
+FOREIGN KEY (id_producto) REFERENCES tabla_productos (id_producto)
+
+);
+
+CREATE TABLE tabla_fpagos(
+id_fpago int  (2)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+fpago varchar(24)
+);
+
+
+create table tabla_ventas(
+id_venta numeric(10) PRIMARY KEY,
+fecha date,
+ticket varchar(32),
+iva numeric(6,2)
+
+);
+
+create table tabla_dventas(
+id_dventa int  (10)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+cantidad numeric(5),
+precio numeric(13,2),
+id_producto int(10),
+FOREIGN KEY (id_producto) REFERENCES tabla_productos (id_producto),
+id_venta numeric(10),
+FOREIGN KEY (id_venta) REFERENCES tabla_ventas (id_venta)
+);
+
+CREATE TABLE tabla_facturas(
+id_factura numeric(10) PRIMARY KEY,
+folio varchar(36),
+serie varchar(20),
+iva numeric(6,2),
+fecha date,
+uuid varchar(64),
+id_fpago int(2),
+FOREIGN KEY (id_fpago) REFERENCES tabla_fpagos(id_fpago),
+id_cliente int(6),
+FOREIGN KEY (id_cliente) REFERENCES tabla_clientes(id_cliente),
+id_venta numeric(10),
+FOREIGN KEY (id_venta) REFERENCES tabla_ventas(id_venta)
+);
+
+CREATE TABLE tabla_dfacturas(
+id_dfactura int  (10)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+cantidad numeric(5),
+precio numeric(13,2),
+id_producto int(10),
+FOREIGN KEY (id_producto) REFERENCES tabla_productos (id_producto),
+id_factura numeric(10),
+FOREIGN KEY (id_factura) REFERENCES tabla_facturas (id_factura)
+);
+
+CREATE TABLE Tabla_entradas(
+id_entrada NUMERIC (10) PRIMARY KEY,
+fecha DATE, 
+nfactura VARCHAR(10),
+descripcion VARCHAR(128)
+);
+
+CREATE TABLE Tabla_dentradas(
+id_dentrada int  (10)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+cantidad NUMERIC (5),
+id_producto int (10),
+FOREIGN KEY (id_producto) REFERENCES
+tabla_productos(id_producto),
+id_entrada NUMERIC (10) PRIMARY KEY,
+FOREIGN KEY (id_entrada) REFERENCES
+tabla_Entradas(id_entrada)
+);
+
